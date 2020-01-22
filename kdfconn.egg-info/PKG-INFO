@@ -1,0 +1,30 @@
+Metadata-Version: 2.1
+Name: kdfconn
+Version: 0.0.1
+Summary: A library to connect pandas with Kinetica
+Home-page: https://github.com/rewreu/learning/tree/master/pandasKinetica
+Author: Jason Wu
+Author-email: rewreu@gmail.com
+License: UNKNOWN
+Description: # Example
+        ```python
+        from kdfconn import kdf
+        import pandas as pd
+        import gpudb
+        conn = gpudb.GPUdb(encoding='BINARY', host="server.ip", port="9191")
+        
+        # construct instance
+        df = kdf(conn)
+        # read from csv file
+        df.from_pandas(pd.read_csv("./tmp/tmp.test3.csv"))
+        # read from kinetica table
+        df.read_table("est6")
+        # write to kinetica table
+        df.to_table("est15",charN_On=True, timeStampColumn="ValidDateTime")
+        ```
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
