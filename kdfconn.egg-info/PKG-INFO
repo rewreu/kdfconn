@@ -2,9 +2,9 @@ Metadata-Version: 2.1
 Name: kdfconn
 Version: 0.0.1
 Summary: A library to connect pandas with Kinetica
-Home-page: https://github.com/rewreu/learning/tree/master/pandasKinetica
-Author: Jason Wu
-Author-email: rewreu@gmail.com
+Home-page: https://github.com
+Author: Jason W
+Author-email: eu8929@gmail.com
 License: UNKNOWN
 Description: # Example
         ```python
