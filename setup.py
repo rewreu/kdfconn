@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="kdfconn", # Replace with your own username
-    version="0.0.2",
+    version="0.0.4",
     author="Jason W",
     author_email="eu8929@gmail.com",
     description="A library to connect pandas with Kinetica",

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: kdfconn
-Version: 0.0.2
+Version: 0.0.4
 Summary: A library to connect pandas with Kinetica
 Home-page: https://github.com
 Author: Jason W

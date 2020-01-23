@@ -61,17 +61,19 @@ class kdf(pd.DataFrame):
         return coltype
 
 
-    def to_table(self, tableName='tmp', clearTableIfExist=False, charN_On=False, timeStampColumn=None):
+    def to_table(self, tableName='tmp', appendExistTable = False, clearTableIfExist=False, charN_On=False, timeStampColumn=None):
         types = []
-        if clearTableIfExist:
-            self.__conn.clear_table(tableName, options={ 'no_error_if_not_exists':'true' })  
-            clearTableIfExist = False
-        else:
-            clearTableIfExist = self.__conn.has_table(tableName)['table_exists']
-        assert clearTableIfExist==False, "table {} exist in database, stop ingestion".format(tableName)
+        if not appendExistTable:
+            if clearTableIfExist:
+                self.__conn.clear_table(tableName, options={ 'no_error_if_not_exists':'true' })  
+                clearTableIfExist = False
+            else:
+                clearTableIfExist = self.__conn.has_table(tableName)['table_exists']
+            assert clearTableIfExist==False, "table {} exist in database, stop ingestion".format(tableName)
 
-        self._tableTypes = [self._getcoltype(column = column, charN_On=charN_On, timeStampColumn=timeStampColumn) for column in self.columns]
-        
+            self._tableTypes = [self._getcoltype(column = column, charN_On=charN_On, timeStampColumn=timeStampColumn) for column in self.columns]
+        else:
+            self._tableTypes = None # use the existing table in database
         try:
             table = gpudb.GPUdbTable(
                 _type=self._tableTypes,
@@ -81,9 +83,15 @@ class kdf(pd.DataFrame):
                 },
                 db=self.__conn
             )
-            print("Table successfully created")
+            if self._tableTypes == None:
+                print("Table successfully connected")
+            else:
+                print("Table successfully created")
         except gpudb.GPUdbException as e:
-            print("Table creation failure: {}".format(str(e)))
+            if self._tableTypes == None:
+                print("Table connection failure: {}".format(str(e)))
+            else:
+                print("Table creation failure: {}".format(str(e)))
             
         i = 0
         while True:
