@@ -42,12 +42,11 @@ class kdf(pd.DataFrame):
 
 
     def _getcoltype(self, column,charN_On, timeStampColumn):
-        
         nullable = True if sum(self[column].isnull())>0 else False
         pdtype = str(self.dtypes[column])
         coltype = [column, self.__TYPE_MAP[pdtype]]
         if pdtype == 'object':
-            assert timeStampColumn!=column, 'Only support timestamp as numeric type'
+            assert column not in timeStampColumn, 'Only support timestamp as numeric type'
             if charN_On:
                 
                 maxChar = self[column].astype(str).map(len).max()
@@ -56,12 +55,17 @@ class kdf(pd.DataFrame):
                 coltype.append(charN)
             if nullable: coltype.append('nullable')
         else: # numeric columns
-            if column==timeStampColumn: coltype.append('timestamp')
+            if column in timeStampColumn: coltype.append('timestamp')
             if nullable: coltype.append('nullable')
         return coltype
 
 
     def to_table(self, tableName='tmp', appendExistTable = False, clearTableIfExist=False, charN_On=False, timeStampColumn=None):
+        """
+        If appendExistTable is True, clearTableIfExist is disabled. 
+        timeStampColumn can be string of a column name, or a list of column names
+        """
+        if type(timeStampColumn) == str or timeStampColumn==None: timeStampColumn = [timeStampColumn]
         types = []
         if not appendExistTable:
             if clearTableIfExist:
